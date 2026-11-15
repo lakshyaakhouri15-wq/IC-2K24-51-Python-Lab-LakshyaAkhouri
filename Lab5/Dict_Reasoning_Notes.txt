@@ -1,0 +1,162 @@
+PART C: CONCEPTUAL & REASONING QUESTIONS
+Topic: Python Dictionaries
+
+Q1. What happens when we assign `dict_b = dict_a`? Explain the differences between variable assignment, shallow copying, and deep copying. Which approach is best suited for cloning a student database containing nested records?
+
+Answer:
+When you execute `dict_b = dict_a`, Python does not duplicate the dictionary in memory. Instead, both identifiers reference the exact same dictionary object, meaning any modification made through one variable will immediately reflect in the other.
+
+A shallow copy constructs a new outer dictionary container, while any inner mutable objects (like nested dictionaries or lists) remain shared references. You can create one via `dict_a.copy()`.
+
+A deep copy recursively duplicates both the outer dictionary and every nested object inside it, producing a completely independent structure:
+
+```python
+import copy
+dict_b = copy.deepcopy(dict_a)
+```
+
+For a student database holding nested structures such as subject-wise scores, `copy.deepcopy()` is the right choice whenever the cloned database needs to be modified independently of the original.
+
+----------------------------------------------------------------
+
+Q2. Why must dictionary keys be hashable? Out of the following values, identify which can act as valid dictionary keys: `[10, 20]`, `(10, 20)`, `{10, 20}`, and `"1020"`.
+
+Answer:
+Python relies on hash values to compute memory slots and retrieve dictionary keys in constant time. Consequently, a key must be hashable—meaning its hash value stays fixed throughout its lifetime.
+
+- `[10, 20]`: Invalid. Lists are mutable and can change in place, so they are unhashable.
+- `(10, 20)`: Valid. This tuple is immutable and contains only hashable integers.
+- `{10, 20}`: Invalid. Sets are mutable collections and cannot be hashed.
+- `"1020"`: Valid. Strings are immutable and hashable.
+
+Note: A tuple is valid as a dictionary key only if every single element stored inside it is also hashable.
+
+----------------------------------------------------------------
+
+Q3. How does accessing a key via `d[key]` differ from `d.get(key)`? Provide practical examples illustrating when to use each.
+
+Answer:
+Using `d[key]` retrieves the value mapped to `key`, but immediately throws a `KeyError` exception if the key is absent.
+
+In contrast, `d.get(key)` safely returns the mapped value if present, or `None` if missing. You can also supply a custom fallback value using `d.get(key, fallback)`.
+
+Examples:
+
+```python
+learner_name = learners[205]["name"]
+word_counts[token] = word_counts.get(token, 0) + 1
+location = directory.get("Rohan", {}).get("city", "Not Specified")
+```
+
+Use square-bracket indexing when the key is guaranteed to exist. Use `.get()` when a key might be absent and you prefer handling it gracefully with a fallback value rather than catching an exception.
+
+----------------------------------------------------------------
+
+Q4. Contrast `d[key] = value` with `d.update()`. When is `update()` the preferred approach?
+
+Answer:
+The assignment syntax `d[key] = value` inserts a single key-value entry or overwrites the value of one specific existing key.
+
+On the other hand, `d.update()` merges multiple key-value pairs into the dictionary in a single operation.
+
+Example:
+
+```python
+staff_member["pay"] = 48000
+
+staff_member.update({
+    "dept": "Engineering",
+    "pay": 48000
+})
+```
+
+The `update()` method is ideal when modifying or inserting several attributes simultaneously from another mapping or iterable of pairs.
+
+----------------------------------------------------------------
+
+Q5. How can we generate a new dictionary of employees earning under 50,000 after granting them a 10% raise, without mutating the original employee dataset?
+
+Answer:
+We can use a dictionary comprehension with a filter condition to select staff whose current pay is below 50,000. Using dictionary unpacking `{**record, ...}` constructs a fresh inner dictionary for each qualifying employee so the source records stay untouched.
+
+Example:
+
+```python
+updated_salaries = {
+    staff_id: {
+        **record,
+        "salary": round(record["salary"] * 1.10, 2)
+    }
+    for staff_id, record in staff_records.items()
+    if record["salary"] < 50000
+}
+```
+
+This technique works well for generating reports or previewing adjustments. To apply the increment permanently, you would modify the original dictionary in place instead.
+
+----------------------------------------------------------------
+
+Q6. Why does deleting keys from a dictionary while iterating directly over it trigger an error? Demonstrate two safe ways to filter out entries with values below 40.
+
+Answer:
+Removing a key alters the internal size and structure of the dictionary. If Python is actively iterating over that dictionary's view object at the same time, it detects the structural mutation and raises a `RuntimeError`.
+
+Approach 1 — Iterate over a static snapshot of the keys:
+
+```python
+for k in list(scores.keys()):
+    if scores[k] < 40:
+        del scores[k]
+```
+
+Approach 2 — Build a new dictionary via comprehension keeping only valid entries:
+
+```python
+scores = {
+    k: val
+    for k, val in scores.items()
+    if val >= 40
+}
+```
+
+Both methods prevent mutating the dictionary while traversing its active iterator.
+
+----------------------------------------------------------------
+
+Q7. Assume each library book entry stores a list of member IDs who checked it out. How can we construct an inverted dictionary mapping each member ID to a list of book titles they borrowed? Why must the values be lists?
+
+Answer:
+We can initialize an empty result dictionary, iterate over all book records, and append each book's title to the list associated with every member ID in its `borrowed_by` list.
+
+Example:
+
+```python
+borrowed_titles = {}
+
+for book_code, details in catalog.items():
+    for member_id in details["borrowed_by"]:
+        borrowed_titles.setdefault(member_id, []).append(details["title"])
+```
+
+The values must be lists because an individual member can borrow multiple books over time. Storing titles in a list allows multiple book titles to accumulate under a single member ID key.
+
+----------------------------------------------------------------
+
+Q8. Compare the average-case lookup time complexity of a dictionary against searching a list. When does building a reverse phone directory make practical sense?
+
+Answer:
+Dictionary key lookups run in $O(1)$ average time thanks to hash-table indexing, whereas searching for a value inside a list takes $O(n)$ linear time because elements may need to be scanned sequentially.
+
+A reverse phone directory maps phone numbers as keys to contact names as values.
+
+Example:
+
+```python
+phone_to_name = {
+    number: person
+    for person, info in phonebook.items()
+    for number in info["numbers"]
+}
+```
+
+Constructing this inverted mapping requires $O(m)$ time proportional to the total number of phone numbers. It is worthwhile when you need to perform repeated lookups by phone number; for a single one-off query, scanning the original dictionary directly is simpler.
