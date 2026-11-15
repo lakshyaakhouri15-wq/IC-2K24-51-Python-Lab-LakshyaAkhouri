@@ -1,50 +1,26 @@
-# Lab 5 — Part A: Dictionary-Based Python Programs
+# Lab 5 — Part B: Dictionary Output Practice
 
-This folder contains five menu-driven Python programs demonstrating dictionaries, nested dictionaries, lists as dictionary values, functions, loops, conditions, sorting, grouping, aggregation, and input validation.
+This folder contains an updated presentation of the eight Python dictionary output-prediction exercises.
 
-## Programs
+## Included file
 
-### Q1. Student Marks Register — `q1_student_marks_register.py`
-- Add, update, delete, and search student records.
-- Store marks for multiple subjects and validate marks from 0 to 100.
-- Display student averages, the class topper, subject toppers, marks below 40, and grade groups.
+- `lab5_part_b_dictionary_output_practice.txt` — all eight questions, code samples, expected outputs, explanations, and the corrected iteration example for Q6.
 
-### Q2. Staff Salary Register — `q2_staff_salary_register.py`
-- Add, update, delete, and search employee details.
-- Calculate department payroll and employee count.
-- Find the highest-paid employee in each department and sort employees by salary.
-- Create separate records showing a 10% raise for salaries below 50,000.
-- Find the department with the highest average salary.
+## Topics
+1. Dictionary aliasing
+2. Shallow copying
+3. Dictionary comprehension with a condition
+4. The `setdefault()` method
+5. Equivalent dictionary keys
+6. Removing dictionary items during iteration
+7. The `pop()` and `popitem()` methods
+8. Duplicate keys created by dictionary comprehension
 
-### Q3. Library Issue and Return — `q3_library_issue_return.py`
-- Add books or increase the number of copies.
-- Issue and return books.
-- Enforce the limit of two books per member.
-- Search book records and display library reports.
+## How to practise
+1. Read a code example and predict its output.
+2. Record your prediction before running it.
+3. Run the snippet using Python 3.
+4. Compare the result with the expected output.
+5. Review the explanation for any differences.
 
-### Q4. Paragraph Word Analyzer — `q4_paragraph_word_analyzer.py`
-- Read a paragraph, normalize its text, and count words using a dictionary.
-- Display the top N words and words used once.
-- Reverse the frequency mapping and group words by length.
-- Search for a word in the paragraph.
-
-### Q5. Contact Directory — `q5_contact_directory.py`
-- Add, update, search, and delete contacts.
-- Store multiple phone numbers for a contact.
-- Validate 10-digit phone numbers and prevent duplicate numbers.
-- Search by part of a name or by phone number.
-- Group contacts by city and display the directory alphabetically.
-
-## Running the programs
-
-Open this folder in a terminal and run one file at a time, for example:
-
-```bash
-python q1_student_marks_register.py
-```
-
-Replace the filename with the program you want to execute. Each program starts its menu when run directly.
-
-## Notes
-
-The programs use sample records for demonstration. Run each program and try different inputs to observe how dictionary entries and reports change. The code has been reorganized and documented; review the logic and make sure you can explain it. Follow your course's rules for attribution and permitted collaboration when adapting reference material.
+The examples retain the original concepts and intended results while using revised variable names and clearer formatting. Follow your course's attribution and collaboration requirements when adapting reference material.

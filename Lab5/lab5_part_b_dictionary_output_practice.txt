@@ -1,0 +1,188 @@
+# Lab 5 — Part B: Predict the Output (Python Dictionaries)
+
+This worksheet contains eight short examples. For each one, predict the result first, then run the code and compare your answer with the explanation.
+
+## Q1. Dictionary Aliasing
+
+### Code
+```python
+profile = {"x": 10, "y": 20}
+second_name = profile
+second_name["z"] = 30
+print(len(profile))
+```
+
+### Output
+```text
+3
+```
+
+### Explanation
+Assigning `profile` to `second_name` does not create another dictionary. Both variables refer to the same object. Adding the `"z"` entry through `second_name` therefore changes `profile` as well, leaving three key-value pairs.
+
+---
+
+## Q2. Shallow Copy
+
+### Code
+```python
+records = {"items": [4]}
+copied_records = records.copy()
+copied_records["items"].append(8)
+print(records)
+```
+
+### Output
+```text
+{'items': [4, 8]}
+```
+
+### Explanation
+`copy()` creates a new outer dictionary, but it does not copy nested mutable objects. The list stored under `"items"` is shared by both dictionaries, so appending `8` through `copied_records` is visible in `records`.
+
+---
+
+## Q3. Dictionary Comprehension with a Condition
+
+### Code
+```python
+filtered = {
+    character: index
+    for character, index in zip("pqr", range(3))
+    if index
+}
+print(filtered)
+```
+
+### Output
+```text
+{'q': 1, 'r': 2}
+```
+
+### Explanation
+`zip()` pairs the letters with the numbers: `p` with `0`, `q` with `1`, and `r` with `2`. The condition `if index` excludes the entry whose value is zero, because `0` is considered false in Python.
+
+---
+
+## Q4. The `setdefault()` Method
+
+### Code
+```python
+person = {"name": "Riya"}
+print(
+    person.setdefault("name", "Aman"),
+    person.setdefault("city", "Indore"),
+    person
+)
+```
+
+### Output
+```text
+Riya Indore {'name': 'Riya', 'city': 'Indore'}
+```
+
+### Explanation
+The first `setdefault()` call finds that `"name"` already exists, so it returns `"Riya"` without changing that entry. The `"city"` key is missing, so the second call inserts `"city": "Indore"` and returns the new value.
+
+---
+
+## Q5. Equivalent Dictionary Keys
+
+### Code
+```python
+items = {1: "first", 1.0: "second", True: "third"}
+print(items, len(items))
+```
+
+### Output
+```text
+{1: 'third'} 1
+```
+
+### Explanation
+Python considers `1`, `1.0`, and `True` equal, and their hash values are equal as well. They therefore refer to the same dictionary key. Each later assignment replaces the value associated with that key, so one entry remains.
+
+---
+
+## Q6. Removing an Item During Dictionary Iteration
+
+### Code
+```python
+scores = {"Math": 75, "Science": 40, "English": 82}
+
+for subject in scores:
+    if scores[subject] == 40:
+        del scores[subject]
+```
+
+### Result
+```text
+RuntimeError: dictionary changed size during iteration
+```
+
+### Explanation
+The loop is iterating directly over the dictionary while the code removes one of its entries. Changing the dictionary's size during iteration raises a `RuntimeError`.
+
+A safe alternative is to iterate over a separate list of keys:
+
+### Corrected Code
+```python
+scores = {"Math": 75, "Science": 40, "English": 82}
+
+for subject in list(scores):
+    if scores[subject] == 40:
+        del scores[subject]
+
+print(scores)
+```
+
+### Output of the corrected code
+```text
+{'Math': 75, 'English': 82}
+```
+
+---
+
+## Q7. The `pop()` and `popitem()` Methods
+
+### Code
+```python
+inventory = {"pen": 12, "book": 5}
+print(inventory.pop("pencil", None), inventory.popitem())
+```
+
+### Output
+```text
+None ('book', 5)
+```
+
+### Explanation
+`pop("pencil", None)` looks for a key that is not present. Since a default value was supplied, it returns `None` instead of raising a `KeyError`. `popitem()` removes and returns the most recently inserted pair, which is `("book", 5)`.
+
+---
+
+## Q8. Dictionary Comprehension with Repeated Values
+
+### Code
+```python
+colours = {"red": 1, "blue": 1}
+reversed_map = {
+    number: colour
+    for colour, number in colours.items()
+}
+print(reversed_map)
+```
+
+### Output
+```text
+{1: 'blue'}
+```
+
+### Explanation
+The comprehension turns each original value into a key in the new dictionary. Both original entries have the value `1`, so they produce the same new key. The later value, `"blue"`, replaces `"red"`.
+
+---
+
+## Conclusion
+
+These examples demonstrate dictionary aliasing and shallow copying, conditional comprehensions, `setdefault()`, equivalent keys, safe and unsafe deletion during iteration, `pop()` and `popitem()`, and the effect of duplicate keys in a dictionary comprehension.
